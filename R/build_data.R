@@ -52,12 +52,44 @@ assert_headers(
   what             = "southwest_fig-1.csv"
 )
 
-# Already one row per climate division; no pivot needed, just a rename. Row
-# order is by numeric division code rather than EPA's own (already ascending,
-# but sorting explicitly makes that an invariant instead of an accident).
+# NOAA climate division IDs encode <state code><two-digit division number>.
+# EPA's own column carries no readable state name, and this site has no
+# climate-division map geometry to draw a real choropleth from (see
+# drought.R's Figure 3 for the same constraint), so the site chart groups
+# divisions by state instead; decoding that state code here, rather than in
+# the site's chart code, is what keeps it tested and reproducible. Limited to
+# the six states this indicator covers: an unrecognised code stops the build
+# instead of mislabelling a division.
+F1_STATE_CODES <- c(
+  `2`  = "Arizona",
+  `4`  = "California",
+  `5`  = "Colorado",
+  `26` = "Nevada",
+  `29` = "New Mexico",
+  `42` = "Utah"
+)
+
+f1_id         <- f1_raw[[F1_KEY]]
+f1_state_code <- substr(f1_id, 1, nchar(f1_id) - 2)
+f1_division   <- substr(f1_id, nchar(f1_id) - 1, nchar(f1_id))
+
+if (any(!f1_state_code %in% names(F1_STATE_CODES))) {
+  stop(
+    "southwest_fig-1.csv: a climate division ID's state code is not one of the\n",
+    "six southwestern states this indicator covers.\n  ids: ",
+    paste(unique(f1_id[!f1_state_code %in% names(F1_STATE_CODES)]), collapse = ", "),
+    call. = FALSE
+  )
+}
+
+# Already one row per climate division; no pivot needed. Row order is by
+# numeric division code rather than EPA's own (already ascending, but sorting
+# explicitly makes that an invariant instead of an accident).
 f1 <- f1_raw |>
   transmute(
     climate_division_id = .data[[F1_KEY]],
+    state                = unname(F1_STATE_CODES[f1_state_code]),
+    division             = f1_division,
     value                = .data[[F1_VALUE]]
   )
 f1 <- f1[order(as.integer(f1$climate_division_id)), ]
@@ -174,6 +206,8 @@ meta <- list(
       rows            = nrow(f1),
       columns         = list(
         col("climate_division_id", "string", "NOAA climate division code, as EPA publishes it."),
+        col("state", "string", "State name, decoded from the leading digits of climate_division_id via NOAA's state numbering."),
+        col("division", "string", "Two-digit division number within the state, decoded from the trailing digits of climate_division_id."),
         col("value", "number", "Average air temperature, 2000-2023, minus the long-term average (1895-2023), in degrees Fahrenheit.")
       )
     ),

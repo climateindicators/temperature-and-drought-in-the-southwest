@@ -91,10 +91,16 @@ group_span <- function(file, group, expected) {
 
 snapshot(
   "southwest_temperature_anomaly.csv", 38L,
-  "201|1.643725775",
-  "4207|1.885529716",
+  "201|Arizona|01|1.643725775",
+  "4207|Utah|07|1.885529716",
   "1.279812661", "2.058228359"
 )
+group_span("southwest_temperature_anomaly.csv", "state", data.frame(
+  key     = c("Arizona", "California", "Colorado", "Nevada", "New Mexico", "Utah"),
+  n       = c(7L, 7L, 5L, 4L, 8L, 7L),
+  lowest  = c("1.555434432", "1.279812661", "1.302091408", "1.301776486", "1.455208333", "1.402834302"),
+  highest = c("1.938921189", "2.058228359", "1.849604328", "1.882574289", "1.904699612", "2.025072674")
+))
 
 snapshot(
   "southwest_drought_monitor_area.csv", 6260L,

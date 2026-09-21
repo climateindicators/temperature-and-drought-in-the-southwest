@@ -21,6 +21,14 @@ datasets:
   - name: climate_division_id
     type: string
     description: NOAA climate division code, as EPA publishes it.
+  - name: state
+    type: string
+    description: State name, decoded from the leading digits of climate_division_id
+      via NOAA's state numbering.
+  - name: division
+    type: string
+    description: Two-digit division number within the state, decoded from the trailing
+      digits of climate_division_id.
   - name: value
     type: number
     description: Average air temperature, 2000-2023, minus the long-term average (1895-2023),
