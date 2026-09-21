@@ -1,0 +1,78 @@
+indicator:
+  name: 'A Closer Look: Temperature and Drought in the Southwest'
+  slug: temperature-and-drought-in-the-southwest
+  publisher: U.S. Environmental Protection Agency
+  source_page: https://19january2025snapshot.epa.gov/climate-indicators/southwest/index.html
+  technical_documentation: https://19january2025snapshot.epa.gov/system/files/documents/2024-12/southwest_td.pdf
+  rights: Public domain, work of the U.S. Government (17 U.S.C. 105)
+datasets:
+- file: southwest_temperature_anomaly.csv
+  figure: Figure 1
+  figure_title: Figure 1. Average Temperatures in the Southwestern United States,
+    2000-2023 Versus Long-Term Average
+  source_file: southwest_fig-1.csv
+  source_sha256: 099dd589f6acc67713b3d3b8a22d8923707173caa9e00759a4bbc0b36e4bbcef
+  source_encoding: windows-1252
+  data_source: NOAA, 2024
+  web_update: December 2024
+  unit: °F
+  rows: 38
+  columns:
+  - name: climate_division_id
+    type: string
+    description: NOAA climate division code, as EPA publishes it.
+  - name: value
+    type: number
+    description: Average air temperature, 2000-2023, minus the long-term average (1895-2023),
+      in degrees Fahrenheit.
+- file: southwest_drought_monitor_area.csv
+  figure: Figure 2
+  figure_title: Figure 2. Southwestern U.S. Lands Under Drought Conditions, 2000-2023
+  source_file: southwest_fig-2.csv
+  source_sha256: 0f20c6f1341a187e1ec50e0b26ed26ccef060bf99808f9a16226cb0aee0ea75e
+  source_encoding: UTF-8
+  data_source: National Drought Mitigation Center, 2024
+  web_update: December 2024
+  unit: percent of land area
+  rows: 6260
+  columns:
+  - name: date
+    type: date
+    description: The weekly U.S. Drought Monitor issue date, ISO 8601, 2000 through
+      2023.
+  - name: category
+    type: string
+    description: U.S. Drought Monitor severity class, D0 through D4.
+  - name: category_label
+    type: string
+    description: EPA's own column header for the class, reproduced verbatim.
+  - name: value
+    type: number
+    description: Percent of land area across the six southwestern states in that class.
+      The five classes partition the dry area, so their sum is the share that was
+      at least abnormally dry.
+- file: southwest_palmer_index.csv
+  figure: Figure 3
+  figure_title: Figure 3. Drought Severity in the Southwestern United States, 1895-2023
+  source_file: southwest_fig-3.csv
+  source_sha256: 4fe8671dfac1a13d35af5989df14af75e31e4a697f608a64ae7234303d5cd099
+  source_encoding: UTF-8
+  data_source: NOAA, 2024
+  web_update: December 2024
+  unit: Palmer Drought Severity Index
+  rows: 258
+  columns:
+  - name: year
+    type: integer
+    description: Calendar year, 1895 through 2023.
+  - name: series
+    type: string
+    description: 'Series key: `annual` for the single-year average, `nine_year` for
+      the nine-year weighted average EPA draws as the thicker line.'
+  - name: series_label
+    type: string
+    description: EPA's own column header for the series, reproduced verbatim.
+  - name: value
+    type: number
+    description: Palmer Drought Severity Index averaged over six southwestern states.
+      Negative is drier than average, positive is wetter.
